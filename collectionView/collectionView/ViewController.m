@@ -13,16 +13,27 @@
 @interface ViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 /** collectionView */
 @property(nonatomic,weak)UICollectionView *collectionView;
+/** 数据 */
+@property(nonatomic,strong)NSMutableArray *imageNames;
 @end
 
 @implementation ViewController
 static NSString *const ZYCPhotoCellId = @"photo";
+- (NSMutableArray *)imageNames
+{
+    if (!_imageNames) {
+        _imageNames = [NSMutableArray array];
+        
+        for (int i=0; i<20; i++) {
+            [_imageNames addObject:[NSString stringWithFormat:@"%zd",i+1]];
+        }
+    }
+    return _imageNames;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     //创建布局
     ZYCCircleLayout *layout = [[ZYCCircleLayout alloc]init];
-    
-    
     //创建collectionView 必须在创建时传layout
     CGFloat collectionW = self.view.frame.size.width;
     CGFloat collectionH = 200;
@@ -54,18 +65,21 @@ static NSString *const ZYCPhotoCellId = @"photo";
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 12;
+    return self.imageNames.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZYCPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ZYCPhotoCellId forIndexPath:indexPath];
 //    cell.backgroundColor = [UIColor orangeColor];
-    cell.imageName = [NSString stringWithFormat:@"%zd",indexPath.item+1];
+    cell.imageName = self.imageNames[indexPath.item];
     return cell;
 }
 #pragma mark - <UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.imageNames removeObjectAtIndex:indexPath.item];
+    [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+    
     
     
 }

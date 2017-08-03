@@ -52,10 +52,16 @@
     
         UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
         attrs.size = CGSizeMake(50, 50);
+    if (count == 1) {
+        attrs.center = CGPointMake(oX, oY);
+    }else{
         CGFloat angle = (2*M_PI/count)*indexPath.item;
         CGFloat centerX = oX + radius*sin(angle);
         CGFloat centerY = oY + radius*cos(angle);
         attrs.center = CGPointMake(centerX, centerY);
+
+    }
+    
     
 
     return attrs;
